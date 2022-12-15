@@ -27,3 +27,9 @@
     font-style: italic;
     font-size: 12px;
   }
+  .status {
+    background-color: rgb(176, 243, 176);
+  }
+  .status_error {
+    background-color: rgb(255, 122, 122)
+  }

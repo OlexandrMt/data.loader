@@ -13,13 +13,25 @@
 <!-- Header -->
 <nav class='navbar sticky-top navbar-light bg-dark'>
   <div class='container-fluid'>
-    <a class='navbar-brand'>
+    <a href="http://127.0.0.1:8201/" class='navbar-brand'>
       <span class='text-light'>Data.</span>
       <span class='text-warning'>loader</span>
     </a>
   </div>
 </nav>
 <!-- End of header -->
+
+<!-- Status message -->
+<?php
+if (isset($_GET['saved'])) {
+  echo "<div class='status py-1 px-3'>Дані збережено</div>";
+} elseif (isset($_GET['deleted'])) {
+  echo "<div class='status py-1 px-3'>Запис видалено</div>";
+} elseif (isset($_GET['error'])) {
+  echo "<div class='status_error py-1 px-3'>Упс... щось пішло не так</div>";
+}
+?>
+<!-- End status message -->
 
 <!-- Form -->
 <div class="content-block container mb-5">
@@ -31,7 +43,7 @@
       Персональні дані
     </h4>
   </div>
-  <form id="personal-form" action="post.php" method="POST" enctype="multipart/form-data">
+  <form id="personal-form" action="" method="POST" enctype="multipart/form-data">
     <div class="profile-form">
       <div class="row">
         <div class="mb-3 mt-2 col-12 col-lg-4">
@@ -80,7 +92,7 @@
       <input name="photo" id="photo" type="file" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">             
     </div>
     <div class="mt-3 px-5 d-flex flex-row-reverse">
-      <button type="submit" class="btn btn-lg btn-outline-warning">Зберегти</button>
+      <button type="submit" name="new_user" class="btn btn-lg btn-outline-warning">Зберегти</button>
     </div>
   </form>
 </div>
@@ -138,9 +150,9 @@
             <td><img class='rounded-circle' src='".$row['avatar']."' alt='photo' width='30' height='30'></td>
             <td>".$row['created_at']."</td>
             <td>
-              <form action='destroy.php' method='post'>
+              <form action='' method='POST'>
                 <input type='hidden' name='id' value='".$row['id']."'>
-                <button type='submit' class='btn btn-outline-warning btn-sm'>Видалити</button>
+                <button type='submit' name='delete_row' class='btn btn-outline-warning btn-sm'>Видалити</button>
               </form>
             </td>
           </tr>
@@ -155,3 +167,84 @@
 <!-- End of table -->
 </body>
 </html>
+
+<!-- POST data to database -->
+<?php
+if(isset($_POST['new_user'])) {
+  $dir = 'avatars';
+  if(!is_dir($dir)){
+      mkdir($dir, 0777, true);
+  }
+
+  if(move_uploaded_file($_FILES['photo']['tmp_name'], 'avatars/'.$_FILES['photo']['name'])) {
+      $photo = 'avatars/'.$_FILES['photo']['name'];
+  } else {
+      $photo = 'img/default_avatar.png';
+  }
+
+  $surname = $_POST['surname'];
+  $name = $_POST['name'];
+  $birthday = $_POST['birthday'];
+  $phone = $_POST['phone'];
+
+  $servername = "db";
+  $username = "user";
+  $password = "test";
+  $dbname = 'myDb';
+
+  // Create connection
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  // Check connection
+  if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+  }
+
+  $sql = "INSERT INTO Person (`id`, `surname`, `name`, `birthday_date`, `phone_number`, `avatar`, `created_at`) 
+  VALUES (NULL, '$surname', '$name', '$birthday', '$phone', '$photo', NOW())";
+
+  if ($conn->query($sql) === TRUE) {
+    $conn->close();
+    echo "<script>window.location.replace('http://127.0.0.1:8201/?saved');</script>";
+  } else {
+    $conn->close();
+    echo "<script>window.location.replace('http://127.0.0.1:8201/?error');</script>";
+  }
+}
+?>
+<!-- END OF POST -->
+
+<!-- DELETE row from database -->
+<?php
+if(isset($_POST['delete_row'])) {
+  $id = $_POST['id'];
+
+  $servername = "db";
+  $username = "user";
+  $password = "test";
+  $dbname = 'myDb';
+
+  // Create connection
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  // Check connection
+  if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+  }
+
+  $sql = "SELECT `avatar` FROM Person WHERE id = $id";
+  $result = $conn->query($sql);
+  $value = $result->fetch_assoc();
+
+  if($value['avatar'] != 'img/default_avatar.png') {
+      unlink($value['avatar']);
+  }
+  $sql = "DELETE FROM Person WHERE `Person`.`id` = $id";
+  $conn->query($sql);
+  $conn->close();
+
+  echo "<script>window.location.replace('http://127.0.0.1:8201/?deleted');</script>";
+  exit;
+}
+?>
+<!-- END OF DELETE -->
