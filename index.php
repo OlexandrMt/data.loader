@@ -5,11 +5,12 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>
-  <link rel="shortcut icon" href="file-earmark-person.svg" type="image/x-icon">
+  <link rel="shortcut icon" href="img/file-earmark-person.svg" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <title>Data loader</title>
 </head>
 <body>
+<!-- Header -->
 <nav class='navbar sticky-top navbar-light bg-dark'>
   <div class='container-fluid'>
     <a class='navbar-brand'>
@@ -18,7 +19,9 @@
     </a>
   </div>
 </nav>
+<!-- End of header -->
 
+<!-- Form -->
 <div class="content-block container mb-5">
   <div class="col-12 mt-3 mt-lg-5 profile-part-name">
     <h4>
@@ -72,7 +75,7 @@
     </div>
     <div id="avatar" class="mt-4 text-center">
       <label class="lable" for="photo">
-        <img id="output" width="260" height="260" src="add_photo.png" alt="Обрати фото">
+        <img id="output" width="260" height="260" src="img/add_photo.png" alt="Обрати фото">
       </label>
       <input name="photo" id="photo" type="file" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">             
     </div>
@@ -89,7 +92,9 @@
     mask: '+{38}(000)000-00-00'
   });
 </script>
+<!-- End of form -->
 <hr>
+<!-- Table with data feom database -->
 <table class='table table-hover'>
   <thead>
     <tr>
@@ -147,5 +152,6 @@
     }
   ?>
 </table>
+<!-- End of table -->
 </body>
 </html>

@@ -7,7 +7,7 @@ if(!is_dir($dir)){
 if(move_uploaded_file($_FILES['photo']['tmp_name'], 'avatars/'.$_FILES['photo']['name'])) {
     $photo = 'avatars/'.$_FILES['photo']['name'];
 } else {
-    $photo = 'default_avatar.png';
+    $photo = 'img/default_avatar.png';
 }
 
 $surname = $_POST['surname'];

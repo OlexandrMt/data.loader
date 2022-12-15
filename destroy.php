@@ -18,7 +18,7 @@ $sql = "SELECT `avatar` FROM Person WHERE id = $id";
 $result = $conn->query($sql);
 $value = $result->fetch_assoc();
 
-if($value['avatar'] != 'default_avatar.png') {
+if($value['avatar'] != 'img/default_avatar.png') {
     unlink($value['avatar']);
 }
 $sql = "DELETE FROM Person WHERE `Person`.`id` = $id";

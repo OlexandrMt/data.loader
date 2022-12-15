@@ -7,7 +7,7 @@ CREATE TABLE `Person` (
 	`name` varchar(255) NOT NULL,
 	`birthday_date` DATE NOT NULL,
 	`phone_number` varchar(255) NOT NULL,
-	`avatar` varchar(255) NOT NULL DEFAULT 'default_avatar.png',
+	`avatar` varchar(255) NOT NULL DEFAULT 'img/default_avatar.png',
 	`created_at` TIMESTAMP NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
